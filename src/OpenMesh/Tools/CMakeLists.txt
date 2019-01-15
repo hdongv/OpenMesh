@@ -9,13 +9,13 @@ include_directories (
 set (directories 
   . 
   Decimater
-  Dualizer
-  Smoother
-  Subdivider/Adaptive/Composite
-  Subdivider/Uniform/Composite 
-  Subdivider/Uniform
+#  Dualizer
+#  Smoother
+#  Subdivider/Adaptive/Composite
+#  Subdivider/Uniform/Composite 
+#  Subdivider/Uniform
   Utils
-  VDPM
+#  VDPM
 )
 
 # collect all header and source files
@@ -25,9 +25,9 @@ acg_append_files (sources "*.cc" ${directories})
 #Drop the template only cc files
 acg_drop_templates(sources)
 
-IF(WIN32)
+#IF(WIN32 AND NOT MINGW)
   acg_append_files (sources "*.c" ${directories})
-ENDIF(WIN32)
+#ENDIF(WIN32 AND NOT MINGW)
 
 # Disable Library installation when not building OpenMesh on its own but as part of another project!
 if ( NOT ${PROJECT_NAME} MATCHES "OpenMesh")
@@ -88,14 +88,14 @@ if ( NOT ACG_PROJECT_MACOS_BUNDLE AND APPLE )
  FILE(GLOB files_install_Utils                           "${CMAKE_CURRENT_SOURCE_DIR}/Utils/*.hh"  "${CMAKE_CURRENT_SOURCE_DIR}/Utils/*T.cc"  "${CMAKE_CURRENT_SOURCE_DIR}/Utils/getopt.h" )
  FILE(GLOB files_install_VDPM                            "${CMAKE_CURRENT_SOURCE_DIR}/VDPM/*.hh"  "${CMAKE_CURRENT_SOURCE_DIR}/VDPM/*T.cc" )
  INSTALL(FILES ${files_install_Decimater}                       DESTINATION include/OpenMesh/Tools/Decimater )
- INSTALL(FILES ${files_install_Dualizer}                        DESTINATION include/OpenMesh/Tools/Dualizer )
- INSTALL(FILES ${files_install_KERNEL_OSG}                      DESTINATION include/OpenMesh/Tools/Kernel_OSG )
- INSTALL(FILES ${files_install_Smoother}                        DESTINATION include/OpenMesh/Tools/Smoother )
- INSTALL(FILES ${files_install_Subdivider_Adaptive}             DESTINATION include/OpenMesh/Tools/Subdivider/Adaptive/Composite )
- INSTALL(FILES ${files_install_Subdivider_Uniform}              DESTINATION include/OpenMesh/Tools/Subdivider/Uniform )
- INSTALL(FILES ${files_install_Subdivider_Uniform_Composite}    DESTINATION include/OpenMesh/Tools/Subdivider/Uniform/Composite )
- INSTALL(FILES ${files_install_Utils}                           DESTINATION include/OpenMesh/Tools/Utils )
- INSTALL(FILES ${files_install_VDPM}                            DESTINATION include/OpenMesh/Tools/VDPM )
+# INSTALL(FILES ${files_install_Dualizer}                        DESTINATION include/OpenMesh/Tools/Dualizer )
+# INSTALL(FILES ${files_install_KERNEL_OSG}                      DESTINATION include/OpenMesh/Tools/Kernel_OSG )
+# INSTALL(FILES ${files_install_Smoother}                        DESTINATION include/OpenMesh/Tools/Smoother )
+# INSTALL(FILES ${files_install_Subdivider_Adaptive}             DESTINATION include/OpenMesh/Tools/Subdivider/Adaptive/Composite )
+# INSTALL(FILES ${files_install_Subdivider_Uniform}              DESTINATION include/OpenMesh/Tools/Subdivider/Uniform )
+# INSTALL(FILES ${files_install_Subdivider_Uniform_Composite}    DESTINATION include/OpenMesh/Tools/Subdivider/Uniform/Composite )
+# INSTALL(FILES ${files_install_Utils}                           DESTINATION include/OpenMesh/Tools/Utils )
+# INSTALL(FILES ${files_install_VDPM}                            DESTINATION include/OpenMesh/Tools/VDPM )
 endif()
 
 

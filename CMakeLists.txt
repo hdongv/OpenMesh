@@ -1,11 +1,23 @@
-#
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
-enable_testing()
+
+# Set and enforce C++-11 flags
+set( CMAKE_CXX_STANDARD_REQUIRED TRUE )
+set( CMAKE_CXX_STANDARD 11 )
+
+#enable_testing()
 
 # Only set project name if OpenMesh is built as stand-alone library
 if("${PROJECT_NAME}" STREQUAL "")
     project (OpenMesh)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+	if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "6.0" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9" OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "4.9")
+		message(WARNING "Your version of GCC contains an optimizer bug. Please verify that you do not use -O3!")
+		string(REPLACE "-O3" "-O2" CMAKE_CXX_FLAGS_RELEASE_NEW "${CMAKE_CXX_FLAGS_RELEASE}")
+		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE_NEW}" CACHE STRING "" FORCE)
+	endif()
 endif()
 
 if ( WIN32 )
@@ -34,6 +46,7 @@ if(${PROJECT_NAME} MATCHES "OpenMesh")
 endif()
 
 include (ACGOutput)
+include(ACGQt)
 
 # ========================================================================
 # Definitions
@@ -92,22 +105,23 @@ endif() # project OpenMesh
 
 add_subdirectory (src/OpenMesh/Core)
 add_subdirectory (src/OpenMesh/Tools)
-add_subdirectory (src/OpenMesh/Apps)
+#add_subdirectory (src/OpenMesh/Apps)
 
 set(OPENMESH_BENCHMARK_DIR CACHE PATH "Source path of benchmark (https://github.com/google/benchmark).")
 if (OPENMESH_BENCHMARK_DIR)
-	add_subdirectory(${OPENMESH_BENCHMARK_DIR} benchmark)
-	add_subdirectory(src/Benchmark)
+	#add_subdirectory(${OPENMESH_BENCHMARK_DIR} benchmark)
+	#add_subdirectory(src/Benchmark)
 endif()
 
 # Do not build unit tests when build as external library
 if(${PROJECT_NAME} MATCHES "OpenMesh")
-    add_subdirectory (src/Unittests)
+    #add_subdirectory (src/Unittests)
 else()
 	# If built as a dependent project simulate effects of
 	# successful finder run:
 	set (OPENMESH_FOUND true PARENT_SCOPE)
 	set (OPENMESH_LIBRARIES OpenMeshCore OpenMeshTools PARENT_SCOPE)
+	set (OPENMESH_INCLUDE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src" PARENT_SCOPE)
 	set (OPENMESH_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" PARENT_SCOPE)
 
 	# Also define variables provided by the old legacy finder.
@@ -119,13 +133,7 @@ else()
 	set (OPENMESH_LIBRARY_DIR "${_OPENMESH_LIBRARY_DIR}" CACHE PATH "The directory where the OpenMesh libraries can be found.")
 endif()
 
-add_subdirectory (Doc)
-
-# ========================================================================
-# Include Python interface
-# ========================================================================
-
-add_subdirectory (src/Python)
+#add_subdirectory (Doc)
 
 # ========================================================================
 # Bundle generation (Targets exist, now configure them)
